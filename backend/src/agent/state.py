@@ -9,6 +9,8 @@ from typing_extensions import Annotated
 
 import operator
 
+class AgentState(TypedDict):
+    messages: Annotated[list, add_messages]    
 
 class OverallState(TypedDict):
     messages: Annotated[list, add_messages]
