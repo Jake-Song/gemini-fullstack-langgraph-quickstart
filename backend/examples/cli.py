@@ -22,7 +22,7 @@ async def main() -> None:
     )
     parser.add_argument(
         "--reasoning-model",
-        default="gemini-2.5-pro",
+        default="gemini-2.5-flash",
         help="Model for the final answer",
     )
     args = parser.parse_args()
@@ -46,7 +46,8 @@ async def main() -> None:
     messages = result.get("messages", [])
     if messages:
         print(messages[-1].content)
-
+        import pprint
+        pprint.pprint(agent.state)
 
 if __name__ == "__main__":
     asyncio.run(main())

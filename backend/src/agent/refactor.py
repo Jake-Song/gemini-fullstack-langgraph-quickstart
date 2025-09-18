@@ -219,7 +219,12 @@ class WebSearchAgent:
                     source["short_url"], source["value"]
                 )
                 unique_sources.append(source)
-
+        
+        # clean up the state
+        self.state["search_query"] = []
+        self.state["web_research_result"] = []
+        self.state["sources_gathered"] = []
+        
         return {
             "messages": [AIMessage(content=result)],
             "sources_gathered": unique_sources,
