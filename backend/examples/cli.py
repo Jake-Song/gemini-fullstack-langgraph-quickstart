@@ -1,10 +1,10 @@
 import argparse
-from langchain_core.messages import HumanMessage
-from agent.graph import graph
+from agent.refactor import HumanMessage
+from agent.refactor import WebSearchAgent
+import asyncio
 import time
 
-
-def main() -> None:
+async def main() -> None:
     """Run the research agent from the command line."""
     parser = argparse.ArgumentParser(description="Run the LangGraph research agent")
     parser.add_argument("question", help="Research question")
@@ -28,20 +28,28 @@ def main() -> None:
     args = parser.parse_args()
 
     state = {
-        "messages": [HumanMessage(content=args.question)],
+        "messages": HumanMessage(content=args.question),
         "initial_search_query_count": args.initial_queries,
         "max_research_loops": args.max_loops,
         "reasoning_model": args.reasoning_model,
     }
+    agent = WebSearchAgent()    
     start_time = time.time()
-    result = graph.invoke(state)
+    loop = asyncio.get_running_loop()
+
+    print(loop)
+    task = asyncio.current_task(loop)
+    print(task)
+    result = await agent.run(state)
     end_time = time.time()
     print(f"Time taken: {end_time - start_time:.2f} seconds")
-    
     messages = result.get("messages", [])
     if messages:
         print(messages[-1].content)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
+    
+    
+    
